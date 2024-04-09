@@ -88,3 +88,22 @@ export const backgrounds = [
     value: 'linear-gradient(270deg, #514a9d, #24c6dc)',
   },
 ]
+
+export const paddings = [
+  {
+    name: 'No padding',
+    value: '0',
+  },
+  {
+    name: 'Small',
+    value: '1rem',
+  },
+  {
+    name: 'Medium',
+    value: '2rem',
+  },
+  {
+    name: 'Large',
+    value: '3rem',
+  },
+]
