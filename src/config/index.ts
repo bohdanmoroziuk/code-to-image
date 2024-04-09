@@ -30,3 +30,18 @@ export const languages = [
     icon: 'icons/typescript.svg',
   },
 ]
+
+export const themes = [
+  {
+    name: 'Monokai',
+    value: 'monokai',
+  },
+  {
+    name: 'Twilight',
+    value: 'twilight',
+  },
+  {
+    name: 'Terminal',
+    value: 'terminal',
+  },
+];
