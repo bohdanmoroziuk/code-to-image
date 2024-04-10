@@ -12,7 +12,7 @@ const language = defineModel<SelectOption>({ required: true })
   <USelectMenu
     v-model="language"
     :options="options"
-    option-attribute="value"
+    option-attribute="name"
     class="w-full"
   >
     <template #label>
