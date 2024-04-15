@@ -11,4 +11,9 @@ export default defineNuxtConfig({
   modules: [
     ['@nuxt/ui', {}],
   ],
+  app: {
+    head: {
+      title: 'CodeToImage',
+    },
+  },
 })
