@@ -11,9 +11,13 @@
     "typecheck": "npx nuxi typecheck"
   },
   "dependencies": {
+    "@nuxt/ui": "^2.15.1",
+    "ace-builds": "^1.32.9",
+    "html2canvas": "^1.4.1",
     "nuxt": "^3.11.2",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue3-ace-editor": "^2.2.4"
   },
   "devDependencies": {
     "typescript": "^5.4.4",
