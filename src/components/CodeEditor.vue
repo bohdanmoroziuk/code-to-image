@@ -15,6 +15,8 @@ const AceEditor = ref<unknown>('div')
 const rootStyle = computed(() => ({
   background: props.background,
   padding: props.padding,
+  maxWidth: '768px',
+  width: '100%',
 }))
 
 onMounted(async () => {

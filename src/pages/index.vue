@@ -30,63 +30,62 @@ const exportPng = async () => {
 </script>
 
 <template>
-  <main class="w-full">
-    <div class="flex items-end gap-x-4 mt-10">
-      <UFormGroup
-        label="Language"
-        class="max-w-60 w-full"
-      >
-        <LanguageSelect
-          v-model="language"
-          :options="languages"
-        />
-      </UFormGroup>
-      <UFormGroup
-        label="Theme"
-        class="max-w-60 w-full"
-      >
-        <ThemeSelect
-          v-model="theme"
-          :options="themes"
-        />
-      </UFormGroup>
-      <UFormGroup
-        label="Background"
-        class="max-w-60 w-full"
-      >
-        <BackgroundSelect
-          v-model="background"
-          :options="backgrounds"
-        />
-      </UFormGroup>
-      <UFormGroup
-        label="Padding"
-        class="max-w-60 w-full"
-      >
-        <PaddingSelect
-          v-model="padding"
-          :options="paddings"
-        />
-      </UFormGroup>
-      <UButton
-        class="whitespace-nowrap"
-        icon="i-heroicons-camera-solid"
-        @click="exportPng"
-      >
-        Export PNG
-      </UButton>
-    </div>
-    <div
-      class="mt-10"
-      ref="editor"
+  <div class="flex items-end w-full max-w-2xl gap-x-4 mt-10 mx-auto">
+    <UFormGroup
+      label="Language"
+      class="max-w-60 w-full"
     >
-      <CodeEditor
-        v-model="content"
-        :language="language.value"
-        :theme="theme.value"
-        :background="background.value"
-        :padding="padding.value"
+      <LanguageSelect
+        v-model="language"
+        :options="languages"
       />
-    </div>
-  </main>
+    </UFormGroup>
+    <UFormGroup
+      label="Theme"
+      class="max-w-60 w-full"
+    >
+      <ThemeSelect
+        v-model="theme"
+        :options="themes"
+      />
+    </UFormGroup>
+    <UFormGroup
+      label="Background"
+      class="max-w-60 w-full"
+    >
+      <BackgroundSelect
+        v-model="background"
+        :options="backgrounds"
+      />
+    </UFormGroup>
+    <UFormGroup
+      label="Padding"
+      class="max-w-60 w-full"
+    >
+      <PaddingSelect
+        v-model="padding"
+        :options="paddings"
+      />
+    </UFormGroup>
+    <UButton
+      class="whitespace-nowrap"
+      icon="i-heroicons-camera-solid"
+      @click="exportPng"
+    >
+      Export PNG
+    </UButton>
+  </div>
+
+  <div
+    class="flex justify-center mt-10"
+    ref="editor"
+  >
+    <CodeEditor
+      v-model="content"
+      :language="language.value"
+      :theme="theme.value"
+      :background="background.value"
+      :padding="padding.value"
+    />
+  </div>
 </template>

@@ -1,12 +1,8 @@
 <template>
-  <div>
-    <UContainer class="max-w-4xl">
-      <div class="flex flex-col items-center gap-y-20">
-        <slot />
-        <DefaultFooter />
-      </div>
-    </UContainer>
-
-    <UNotifications />
+  <div class="flex flex-col min-h-screen h-full gap-y-10">
+    <main class="flex-1">
+      <slot />
+    </main>
+    <DefaultFooter />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <footer class="flex items-center gap-10 py-16 mt-auto">
+  <footer class="flex items-center justify-center gap-10 p-5">
     <NuxtLink
       class="text-sm font-medium cursor-pointer"
       href="https://github.com/bohdanmoroziuk/code-to-image.git"
