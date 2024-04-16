@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import htmlToCanvas from 'html2canvas'
-
+import CodeEditor from '~/components/CodeEditor.vue'
 import { languages, themes, backgrounds, paddings, getInitialContent } from '~/config'
+
+const toast = useToast()
 
 const language = useState('language', () => nth(languages, -1)!)
 
@@ -13,19 +14,23 @@ const padding = useState('padding', () => nth(paddings, 1)!)
 
 const content = useState('content', getInitialContent)
 
-const editor = ref<HTMLDivElement>()
+const editor = ref<InstanceType<typeof CodeEditor> | null>(null)
 
 const exportPng = async () => {
-  if (!editor.value) return
+  try {
+    if (!editor.value) {
+      throw new Error('No editor provided')
+    }
 
-  const canvas = await htmlToCanvas(editor.value)
-  const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
+    const screenshot = await editor.value.getScreenshot()
 
-  const link = document.createElement('a')
-
-  link.download = 'code.png'
-  link.href = image
-  link.click()
+    saveImage(screenshot, 'code.png')
+  } catch (error) {
+    toast.add({
+      color: 'red',
+      title: (error as Error).message,
+    })
+  }
 }
 </script>
 
@@ -76,16 +81,14 @@ const exportPng = async () => {
     </UButton>
   </div>
 
-  <div
-    class="flex justify-center mt-10"
-    ref="editor"
-  >
+  <div class="flex justify-center mt-10">
     <CodeEditor
       v-model="content"
       :language="language.value"
       :theme="theme.value"
       :background="background.value"
       :padding="padding.value"
+      ref="editor"
     />
   </div>
 </template>

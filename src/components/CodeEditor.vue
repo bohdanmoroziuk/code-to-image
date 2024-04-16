@@ -10,6 +10,8 @@ const props = defineProps<Props>()
 
 const content = defineModel<string>({ required: true, })
 
+const root = ref<HTMLDivElement>()
+
 const AceEditor = ref<unknown>('div')
 
 const rootStyle = computed(() => ({
@@ -32,10 +34,27 @@ onMounted(async () => {
   await import('ace-builds/src-noconflict/theme-terminal')
   AceEditor.value = markRaw((await import('vue3-ace-editor')).VAceEditor)
 })
+
+const getScreenshot = async () => {
+  if (!root.value) {
+    throw new Error('No root element provided')
+  }
+
+  const screenshot = await htmlToImage(root.value)
+
+  return screenshot
+}
+
+defineExpose({
+  getScreenshot,
+})
 </script>
 
 <template>
-  <div :style="rootStyle">
+  <div
+    :style="rootStyle"
+    ref="root"
+  >
     <component
       v-model:value="content"
       :is="AceEditor"
