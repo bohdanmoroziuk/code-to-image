@@ -1,4 +1,6 @@
-# code-to-image
+# CodeToImage
+
+> Take screenshots of your code
 
 ## Setup
 
