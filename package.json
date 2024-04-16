@@ -1,5 +1,6 @@
 {
   "name": "code-to-image",
+  "description": "Take screenshots of your code",
   "private": true,
   "type": "module",
   "scripts": {
