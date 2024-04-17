@@ -55,11 +55,19 @@ defineExpose({
     :style="rootStyle"
     ref="root"
   >
+    <header class="flex items-center justify-between h-12 px-4 bg-black bg-opacity-80 rounded-t-md">
+      <div class="flex items-center gap-x-1">
+        <div class="w-3 h-3 rounded-full bg-[#ff5656]"></div>
+        <div class="w-3 h-3 rounded-full bg-[#ffbc6a]"></div>
+        <div class="w-3 h-3 rounded-full bg-[#67f772]"></div>
+      </div>
+    </header>
     <component
       v-model:value="content"
       :is="AceEditor"
       :lang="language"
       :theme="theme"
+      class="rounded-b-md"
       style="height: 400px"
     />
   </div>
