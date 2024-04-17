@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import htmlToCanvas from 'html2canvas'
-
+import CodeEditor from '~/components/CodeEditor.vue'
 import { languages, themes, backgrounds, paddings, getInitialContent } from '~/config'
+
+const toast = useToast()
 
 const language = useState('language', () => nth(languages, -1)!)
 
@@ -13,80 +14,89 @@ const padding = useState('padding', () => nth(paddings, 1)!)
 
 const content = useState('content', getInitialContent)
 
-const editor = ref<HTMLDivElement>()
+const title = useState('title', () => 'Untitled')
+
+const icon = computed(() => language.value.icon)
+
+const editor = ref<InstanceType<typeof CodeEditor> | null>(null)
 
 const exportPng = async () => {
-  if (!editor.value) return
+  try {
+    if (!editor.value) {
+      throw new Error('No editor provided')
+    }
 
-  const canvas = await htmlToCanvas(editor.value)
-  const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
+    const screenshot = await editor.value.getScreenshot()
 
-  const link = document.createElement('a')
+    const fileName = `${title.value}.png`
 
-  link.download = 'code.png'
-  link.href = image
-  link.click()
+    saveImage(screenshot, fileName)
+  } catch (error) {
+    toast.add({
+      color: 'red',
+      title: (error as Error).message,
+    })
+  }
 }
 </script>
 
 <template>
-  <main class="w-full">
-    <div class="flex items-end gap-x-4 mt-10">
-      <UFormGroup
-        label="Language"
-        class="max-w-60 w-full"
-      >
-        <LanguageSelect
-          v-model="language"
-          :options="languages"
-        />
-      </UFormGroup>
-      <UFormGroup
-        label="Theme"
-        class="max-w-60 w-full"
-      >
-        <ThemeSelect
-          v-model="theme"
-          :options="themes"
-        />
-      </UFormGroup>
-      <UFormGroup
-        label="Background"
-        class="max-w-60 w-full"
-      >
-        <BackgroundSelect
-          v-model="background"
-          :options="backgrounds"
-        />
-      </UFormGroup>
-      <UFormGroup
-        label="Padding"
-        class="max-w-60 w-full"
-      >
-        <PaddingSelect
-          v-model="padding"
-          :options="paddings"
-        />
-      </UFormGroup>
-      <UButton
-        class="whitespace-nowrap"
-        icon="i-heroicons-camera-solid"
-        @click="exportPng"
-      >
-        Export PNG
-      </UButton>
-    </div>
-    <div
-      class="mt-10"
-      ref="editor"
+  <div class="flex items-end w-full max-w-2xl gap-x-4 mt-10 mx-auto">
+    <UFormGroup
+      label="Language"
+      class="max-w-60 w-full"
     >
-      <CodeEditor
-        v-model="content"
-        :language="language.value"
-        :theme="theme.value"
-        :background="background.value"
-        :padding="padding.value"
+      <LanguageSelect
+        v-model="language"
+        :options="languages"
       />
-    </div>
-  </main>
+    </UFormGroup>
+    <UFormGroup
+      label="Theme"
+      class="max-w-60 w-full"
+    >
+      <ThemeSelect
+        v-model="theme"
+        :options="themes"
+      />
+    </UFormGroup>
+    <UFormGroup
+      label="Background"
+      class="max-w-60 w-full"
+    >
+      <BackgroundSelect
+        v-model="background"
+        :options="backgrounds"
+      />
+    </UFormGroup>
+    <UFormGroup
+      label="Padding"
+      class="max-w-60 w-full"
+    >
+      <PaddingSelect
+        v-model="padding"
+        :options="paddings"
+      />
+    </UFormGroup>
+    <UButton
+      class="whitespace-nowrap"
+      icon="i-heroicons-camera-solid"
+      @click="exportPng"
+    >
+      Export PNG
+    </UButton>
+  </div>
+
+  <div class="flex justify-center mt-10">
+    <CodeEditor
+      v-model:content="content"
+      v-model:title="title"
+      :language="language.value"
+      :icon="icon"
+      :theme="theme.value"
+      :background="background.value"
+      :padding="padding.value"
+      ref="editor"
+    />
+  </div>
 </template>
