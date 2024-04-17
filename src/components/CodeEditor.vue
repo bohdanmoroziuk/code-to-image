@@ -1,6 +1,7 @@
 <script setup lang="ts">
 interface Props {
   language: string
+  icon: string
   theme: string
   background: string
   padding: string
@@ -57,7 +58,7 @@ defineExpose({
     :style="rootStyle"
     ref="root"
   >
-    <header class="flex items-center justify-between px-4 py-2 bg-black bg-opacity-80 rounded-t-md">
+    <header class="flex items-center justify-between h-14 px-4 bg-black bg-opacity-80 rounded-t-md">
       <div class="flex items-center gap-x-1">
         <div class="w-3 h-3 rounded-full bg-[#ff5656]"></div>
         <div class="w-3 h-3 rounded-full bg-[#ffbc6a]"></div>
@@ -72,7 +73,13 @@ defineExpose({
           input-class="font-medium text-base text-center"
         />
       </div>
-      <div class="w-11"></div>
+      <div class="flex justify-center w-11 p-1 bg-black bg-opacity-30 rounded-sm">
+        <img
+          :src="icon"
+          :alt="language"
+          class="w-8"
+        />
+      </div>
     </header>
     <component
       v-model:value="content"

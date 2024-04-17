@@ -16,6 +16,8 @@ const content = useState('content', getInitialContent)
 
 const title = useState('title', () => 'Untitled')
 
+const icon = computed(() => language.value.icon)
+
 const editor = ref<InstanceType<typeof CodeEditor> | null>(null)
 
 const exportPng = async () => {
@@ -90,6 +92,7 @@ const exportPng = async () => {
       v-model:content="content"
       v-model:title="title"
       :language="language.value"
+      :icon="icon"
       :theme="theme.value"
       :background="background.value"
       :padding="padding.value"
