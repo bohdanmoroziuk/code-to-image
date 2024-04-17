@@ -8,7 +8,9 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const content = defineModel<string>({ required: true, })
+const content = defineModel<string>('content', { required: true, })
+
+const title = defineModel<string>('title', { required: true, })
 
 const root = ref<HTMLDivElement>()
 
@@ -55,12 +57,22 @@ defineExpose({
     :style="rootStyle"
     ref="root"
   >
-    <header class="flex items-center justify-between h-12 px-4 bg-black bg-opacity-80 rounded-t-md">
+    <header class="flex items-center justify-between px-4 py-2 bg-black bg-opacity-80 rounded-t-md">
       <div class="flex items-center gap-x-1">
         <div class="w-3 h-3 rounded-full bg-[#ff5656]"></div>
         <div class="w-3 h-3 rounded-full bg-[#ffbc6a]"></div>
         <div class="w-3 h-3 rounded-full bg-[#67f772]"></div>
       </div>
+      <div class="mx-auto">
+        <UInput
+          v-model="title"
+          :padded="false"
+          variant="none"
+          class="w-full text-[hsla(0,0%,100%,0.6)] bg-transparent"
+          input-class="font-medium text-base text-center"
+        />
+      </div>
+      <div class="w-11"></div>
     </header>
     <component
       v-model:value="content"
@@ -72,3 +84,10 @@ defineExpose({
     />
   </div>
 </template>
+
+<style>
+.ace_editor {
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2);
+}
+</style>

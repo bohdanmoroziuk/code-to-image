@@ -14,6 +14,8 @@ const padding = useState('padding', () => nth(paddings, 1)!)
 
 const content = useState('content', getInitialContent)
 
+const title = useState('title', () => 'Untitled')
+
 const editor = ref<InstanceType<typeof CodeEditor> | null>(null)
 
 const exportPng = async () => {
@@ -24,7 +26,9 @@ const exportPng = async () => {
 
     const screenshot = await editor.value.getScreenshot()
 
-    saveImage(screenshot, 'code.png')
+    const fileName = `${title.value}.png`
+
+    saveImage(screenshot, fileName)
   } catch (error) {
     toast.add({
       color: 'red',
@@ -83,7 +87,8 @@ const exportPng = async () => {
 
   <div class="flex justify-center mt-10">
     <CodeEditor
-      v-model="content"
+      v-model:content="content"
+      v-model:title="title"
       :language="language.value"
       :theme="theme.value"
       :background="background.value"
