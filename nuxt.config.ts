@@ -14,6 +14,12 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'CodeToImage',
+      meta: [
+        {
+          name: 'description',
+          content: 'Take screenshots of your code',
+        },
+      ],
     },
   },
 })

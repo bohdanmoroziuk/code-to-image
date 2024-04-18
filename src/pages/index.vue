@@ -41,7 +41,7 @@ const exportPng = async () => {
 </script>
 
 <template>
-  <div class="flex items-end w-full max-w-2xl gap-x-4 mt-10 mx-auto">
+  <div class="flex items-end w-full max-w-2xl gap-x-4 mx-auto">
     <UFormGroup
       label="Language"
       class="max-w-60 w-full"
