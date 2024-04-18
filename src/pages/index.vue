@@ -97,6 +97,12 @@ const exportPng = async () => {
       :background="background.value"
       :padding="padding.value"
       ref="editor"
-    />
+    >
+      <template #loading>
+        <div class="flex justify-center">
+          <Loader />
+        </div>
+      </template>
+    </CodeEditor>
   </div>
 </template>
