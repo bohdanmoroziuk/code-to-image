@@ -13,6 +13,8 @@ const content = defineModel<string>('content', { required: true, })
 
 const title = defineModel<string>('title', { required: true, })
 
+const loading = ref(true)
+
 const root = ref<HTMLDivElement>()
 
 const AceEditor = ref<unknown>('div')
@@ -36,6 +38,7 @@ onMounted(async () => {
   await import('ace-builds/src-noconflict/theme-twilight')
   await import('ace-builds/src-noconflict/theme-terminal')
   AceEditor.value = markRaw((await import('vue3-ace-editor')).VAceEditor)
+  loading.value = false
 })
 
 const getScreenshot = async () => {
@@ -54,7 +57,18 @@ defineExpose({
 </script>
 
 <template>
+  <slot
+    v-if="loading"
+    name="loading"
+  >
+    <div class="flex justify-center">
+      <p class="m-0 text-sm">
+        Loading...
+      </p>
+    </div>
+  </slot>
   <div
+    v-else
     :style="rootStyle"
     ref="root"
   >
