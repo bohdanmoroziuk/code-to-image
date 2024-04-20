@@ -6,7 +6,7 @@ const toast = useToast()
 
 const language = useState('language', () => nth(languages, -1)!.value)
 
-const theme = useState('theme', () => head(themes)!)
+const theme = useState('theme', () => head(themes)!.value)
 
 const background = useState('background', () => head(backgrounds)!)
 
@@ -86,7 +86,7 @@ const exportPng = async () => {
       v-model:title="title"
       :language="language"
       :icon="icon"
-      :theme="theme.value"
+      :theme="theme"
       :background="background.value"
       :padding="padding.value"
       ref="editor"

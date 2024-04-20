@@ -5,22 +5,15 @@ interface Props {
 
 const { options } = defineProps<Props>()
 
-const theme = defineModel<SelectOption>({ required: true })
+const selected = defineModel<SelectOptionValue>({ required: true })
 </script>
 
 <template>
   <USelectMenu
-    v-model="theme"
+    v-model="selected"
     :options="options"
+    placeholder="Select a theme"
+    value-attribute="value"
     option-attribute="name"
-    class="w-full"
-  >
-    <template #label>
-      <span class="truncate">{{ theme.name }}</span>
-    </template>
-
-    <template #option="{ option }">
-      <span class="truncate">{{ option.name }}</span>
-    </template>
-  </USelectMenu>
+  />
 </template>
