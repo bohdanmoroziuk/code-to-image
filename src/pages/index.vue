@@ -41,50 +41,41 @@ const exportPng = async () => {
 </script>
 
 <template>
-  <div class="flex items-end w-full max-w-2xl gap-x-4 mx-auto">
-    <UFormGroup
-      label="Language"
-      class="max-w-60 w-full"
-    >
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 lg:items-end gap-4 w-full max-w-2xl mx-auto">
+    <UFormGroup label="Language">
       <LanguageSelect
         v-model="language"
         :options="languages"
       />
     </UFormGroup>
-    <UFormGroup
-      label="Theme"
-      class="max-w-60 w-full"
-    >
+    <UFormGroup label="Theme">
       <ThemeSelect
         v-model="theme"
         :options="themes"
       />
     </UFormGroup>
-    <UFormGroup
-      label="Background"
-      class="max-w-60 w-full"
-    >
+    <UFormGroup label="Background">
       <BackgroundSelect
         v-model="background"
         :options="backgrounds"
       />
     </UFormGroup>
-    <UFormGroup
-      label="Padding"
-      class="max-w-60 w-full"
-    >
+    <UFormGroup label="Padding">
       <PaddingSelect
         v-model="padding"
         :options="paddings"
       />
     </UFormGroup>
-    <UButton
-      class="whitespace-nowrap"
-      icon="i-heroicons-camera-solid"
-      @click="exportPng"
-    >
-      Export PNG
-    </UButton>
+    <div class="sm:col-span-2 md:col-span-4 lg:col-span-1">
+      <UButton
+        class="whitespace-nowrap"
+        icon="i-heroicons-camera-solid"
+        block
+        @click="exportPng"
+      >
+        Export PNG
+      </UButton>
+    </div>
   </div>
 
   <div class="flex justify-center mt-10">
