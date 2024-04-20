@@ -10,7 +10,7 @@ const theme = useState('theme', () => head(themes)!.value)
 
 const background = useState('background', () => head(backgrounds)!.value)
 
-const padding = useState('padding', () => nth(paddings, 1)!)
+const padding = useState('padding', () => nth(paddings, 1)!.value)
 
 const content = useState('content', getInitialContent)
 
@@ -88,7 +88,7 @@ const exportPng = async () => {
       :icon="icon"
       :theme="theme"
       :background="background"
-      :padding="padding.value"
+      :padding="padding"
       ref="editor"
     >
       <template #loading>

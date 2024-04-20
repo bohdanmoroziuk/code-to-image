@@ -12,7 +12,6 @@ const selected = defineModel<SelectOptionValue>({ required: true })
   <USelectMenu
     v-model="selected"
     :options="options"
-    placeholder="Select a background"
     value-attribute="value"
     option-attribute="name"
   >

@@ -5,22 +5,14 @@ interface Props {
 
 const { options } = defineProps<Props>()
 
-const padding = defineModel<SelectOption>({ required: true })
+const selected = defineModel<SelectOptionValue>({ required: true })
 </script>
 
 <template>
   <USelectMenu
-    v-model="padding"
+    v-model="selected"
     :options="options"
+    value-attribute="value"
     option-attribute="name"
-    class="w-full"
-  >
-    <template #label>
-      <span class="truncate">{{ padding.name }}</span>
-    </template>
-
-    <template #option="{ option }">
-      <span class="truncate">{{ option.name }}</span>
-    </template>
-  </USelectMenu>
+  />
 </template>
