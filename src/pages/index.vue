@@ -12,6 +12,10 @@ const background = useState('background', () => head(backgrounds)!.value)
 
 const padding = useState('padding', () => nth(paddings, 1)!.value)
 
+const showHeader = useState('show-header', () => true)
+
+const roundedCorners = useState('rounded-corners', () => true)
+
 const content = useState('content', getInitialContent)
 
 const title = useState('title', () => 'Untitled')
@@ -43,7 +47,7 @@ const exportPng = async () => {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 lg:items-end gap-4 w-full max-w-2xl mx-auto">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 md:items-center gap-4 w-full max-w-2xl mx-auto">
     <UFormGroup label="Language">
       <LanguageSelect
         v-model="language"
@@ -68,7 +72,15 @@ const exportPng = async () => {
         :options="paddings"
       />
     </UFormGroup>
-    <div class="sm:col-span-2 md:col-span-4 lg:col-span-1">
+    <UCheckbox
+      v-model="showHeader"
+      label="Show header"
+    />
+    <UCheckbox
+      v-model="roundedCorners"
+      label="Rounded corners"
+    />
+    <div class="sm:col-span-2">
       <UButton
         class="whitespace-nowrap"
         icon="i-heroicons-camera-solid"
@@ -89,6 +101,8 @@ const exportPng = async () => {
       :theme="theme"
       :background="background"
       :padding="padding"
+      :show-header="showHeader"
+      :rounded-corners="roundedCorners"
       ref="editor"
     >
       <template #loading>
