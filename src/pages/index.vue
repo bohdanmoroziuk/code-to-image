@@ -1,22 +1,28 @@
 <script setup lang="ts">
 import CodeEditor from '~/components/CodeEditor.vue'
-import { languages, themes, backgrounds, paddings, getInitialContent } from '~/config'
+import { languages, icons, themes, backgrounds, paddings, getInitialContent } from '~/config'
 
 const toast = useToast()
 
-const language = useState('language', () => nth(languages, -1)!)
+const language = useState('language', () => nth(languages, -1)!.value)
 
-const theme = useState('theme', () => head(themes)!)
+const theme = useState('theme', () => head(themes)!.value)
 
-const background = useState('background', () => head(backgrounds)!)
+const background = useState('background', () => head(backgrounds)!.value)
 
-const padding = useState('padding', () => nth(paddings, 1)!)
+const padding = useState('padding', () => nth(paddings, 1)!.value)
+
+const showHeader = useState('show-header', () => true)
+
+const roundedCorners = useState('rounded-corners', () => true)
 
 const content = useState('content', getInitialContent)
 
 const title = useState('title', () => 'Untitled')
 
-const icon = computed(() => language.value.icon)
+const icon = computed(() => {
+  return icons[language.value]
+})
 
 const editor = ref<InstanceType<typeof CodeEditor> | null>(null)
 
@@ -41,61 +47,62 @@ const exportPng = async () => {
 </script>
 
 <template>
-  <div class="flex items-end w-full max-w-2xl gap-x-4 mx-auto">
-    <UFormGroup
-      label="Language"
-      class="max-w-60 w-full"
-    >
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 md:items-center gap-4 w-full max-w-2xl mx-auto">
+    <UFormGroup label="Language">
       <LanguageSelect
         v-model="language"
         :options="languages"
       />
     </UFormGroup>
-    <UFormGroup
-      label="Theme"
-      class="max-w-60 w-full"
-    >
+    <UFormGroup label="Theme">
       <ThemeSelect
         v-model="theme"
         :options="themes"
       />
     </UFormGroup>
-    <UFormGroup
-      label="Background"
-      class="max-w-60 w-full"
-    >
+    <UFormGroup label="Background">
       <BackgroundSelect
         v-model="background"
         :options="backgrounds"
       />
     </UFormGroup>
-    <UFormGroup
-      label="Padding"
-      class="max-w-60 w-full"
-    >
+    <UFormGroup label="Padding">
       <PaddingSelect
         v-model="padding"
         :options="paddings"
       />
     </UFormGroup>
-    <UButton
-      class="whitespace-nowrap"
-      icon="i-heroicons-camera-solid"
-      @click="exportPng"
-    >
-      Export PNG
-    </UButton>
+    <UCheckbox
+      v-model="showHeader"
+      label="Show header"
+    />
+    <UCheckbox
+      v-model="roundedCorners"
+      label="Rounded corners"
+    />
+    <div class="sm:col-span-2">
+      <UButton
+        class="whitespace-nowrap"
+        icon="i-heroicons-camera-solid"
+        block
+        @click="exportPng"
+      >
+        Export PNG
+      </UButton>
+    </div>
   </div>
 
   <div class="flex justify-center mt-10">
     <CodeEditor
       v-model:content="content"
       v-model:title="title"
-      :language="language.value"
+      :language="language"
       :icon="icon"
-      :theme="theme.value"
-      :background="background.value"
-      :padding="padding.value"
+      :theme="theme"
+      :background="background"
+      :padding="padding"
+      :show-header="showHeader"
+      :rounded-corners="roundedCorners"
       ref="editor"
     >
       <template #loading>

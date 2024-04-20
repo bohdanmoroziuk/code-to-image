@@ -5,6 +5,8 @@ interface Props {
   theme: string
   background: string
   padding: string
+  showHeader: boolean
+  roundedCorners: boolean
 }
 
 const props = defineProps<Props>()
@@ -18,6 +20,15 @@ const loading = ref(true)
 const root = ref<HTMLDivElement>()
 
 const AceEditor = ref<unknown>('div')
+
+const headerClass = computed(() => ({
+  'hidden': !props.showHeader,
+  'rounded-t-md': props.roundedCorners,
+}))
+
+const mainClass = computed(() => ({
+  'rounded-b-md': props.roundedCorners,
+}))
 
 const rootStyle = computed(() => ({
   background: props.background,
@@ -72,7 +83,10 @@ defineExpose({
     :style="rootStyle"
     ref="root"
   >
-    <header class="flex items-center justify-between h-14 px-4 bg-black bg-opacity-80 rounded-t-md">
+    <header
+      :class="headerClass"
+      class="flex items-center justify-between h-14 px-4 bg-black bg-opacity-80"
+    >
       <div class="flex items-center gap-x-1">
         <div class="w-3 h-3 rounded-full bg-[#ff5656]"></div>
         <div class="w-3 h-3 rounded-full bg-[#ffbc6a]"></div>
@@ -95,14 +109,18 @@ defineExpose({
         />
       </div>
     </header>
-    <component
-      v-model:value="content"
-      :is="AceEditor"
-      :lang="language"
-      :theme="theme"
-      class="rounded-b-md"
-      style="height: 400px"
-    />
+    <main
+      :class="mainClass"
+      class="overflow-hidden"
+    >
+      <component
+        v-model:value="content"
+        :is="AceEditor"
+        :lang="language"
+        :theme="theme"
+        style="height: 400px"
+      />
+    </main>
   </div>
 </template>
 

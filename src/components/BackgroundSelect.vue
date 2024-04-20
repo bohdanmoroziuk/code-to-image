@@ -5,28 +5,22 @@ interface Props {
 
 const { options } = defineProps<Props>()
 
-const background = defineModel<SelectOption>({ required: true })
+const selected = defineModel<SelectOptionValue>({ required: true })
 </script>
 
 <template>
   <USelectMenu
-    v-model="background"
+    v-model="selected"
     :options="options"
+    value-attribute="value"
     option-attribute="name"
-    class="w-full"
   >
     <template #label>
-      <div
-        class="rounded-full w-5 h-5"
-        :style="{ background: background.value }"
-      />
+      <BackgroundSelectOption :value="selected" />
     </template>
 
     <template #option="{ option }">
-      <div
-        class="rounded-full w-5 h-5"
-        :style="{ background: option.value }"
-      />
+      <BackgroundSelectOption :value="option.value" />
     </template>
   </USelectMenu>
 </template>

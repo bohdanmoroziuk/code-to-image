@@ -2,34 +2,37 @@ export const languages = [
   {
     name: 'JavaScript',
     value: 'javascript',
-    icon: 'icons/javascript.svg',
   },
   {
     name: 'HTML',
     value: 'html',
-    icon: 'icons/html.svg',
   },
   {
     name: 'CSS',
     value: 'css',
-    icon: 'icons/css.svg',
   },
   {
     name: 'Python',
     value: 'python',
-    icon: 'icons/python.svg',
   },
   {
     name: 'Java',
     value: 'java',
-    icon: 'icons/java.svg',
   },
   {
     name: 'TypeScript',
     value: 'typescript',
-    icon: 'icons/typescript.svg',
   },
 ]
+
+export const icons: Record<string, string> = {
+  javascript: 'icons/javascript.svg',
+  html: 'icons/html.svg',
+  css: 'icons/css.svg',
+  python: 'icons/python.svg',
+  java: 'icons/java.svg',
+  typescript: 'icons/typescript.svg',
+}
 
 export const themes = [
   {
