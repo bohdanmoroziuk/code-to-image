@@ -8,7 +8,7 @@ const language = useState('language', () => nth(languages, -1)!.value)
 
 const theme = useState('theme', () => head(themes)!.value)
 
-const background = useState('background', () => head(backgrounds)!)
+const background = useState('background', () => head(backgrounds)!.value)
 
 const padding = useState('padding', () => nth(paddings, 1)!)
 
@@ -87,7 +87,7 @@ const exportPng = async () => {
       :language="language"
       :icon="icon"
       :theme="theme"
-      :background="background.value"
+      :background="background"
       :padding="padding.value"
       ref="editor"
     >
