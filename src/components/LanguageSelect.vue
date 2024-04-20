@@ -5,22 +5,15 @@ interface Props {
 
 const { options } = defineProps<Props>()
 
-const language = defineModel<SelectOption>({ required: true })
+const selected = defineModel<SelectOptionValue>({ required: true })
 </script>
 
 <template>
   <USelectMenu
-    v-model="language"
+    v-model="selected"
     :options="options"
+    placeholder="Select a language"
+    value-attribute="value"
     option-attribute="name"
-    class="w-full"
-  >
-    <template #label>
-      <span class="truncate">{{ language.name }}</span>
-    </template>
-
-    <template #option="{ option }">
-      <span class="truncate">{{ option.name }}</span>
-    </template>
-  </USelectMenu>
+  />
 </template>

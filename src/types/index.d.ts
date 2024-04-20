@@ -3,8 +3,12 @@ export {
 }
 
 declare global {
-  interface SelectOption {
-    name: string
-    value: string
+  type SelectOptionName = string
+
+  type SelectOptionValue = string
+
+  type SelectOption = {
+    name: SelectOptionName
+    value: SelectOptionValue
   }
 }

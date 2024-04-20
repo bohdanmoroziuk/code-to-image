@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import CodeEditor from '~/components/CodeEditor.vue'
-import { languages, themes, backgrounds, paddings, getInitialContent } from '~/config'
+import { languages, icons, themes, backgrounds, paddings, getInitialContent } from '~/config'
 
 const toast = useToast()
 
-const language = useState('language', () => nth(languages, -1)!)
+const language = useState('language', () => nth(languages, -1)!.value)
 
 const theme = useState('theme', () => head(themes)!)
 
@@ -16,7 +16,9 @@ const content = useState('content', getInitialContent)
 
 const title = useState('title', () => 'Untitled')
 
-const icon = computed(() => language.value.icon)
+const icon = computed(() => {
+  return icons[language.value]
+})
 
 const editor = ref<InstanceType<typeof CodeEditor> | null>(null)
 
@@ -82,7 +84,7 @@ const exportPng = async () => {
     <CodeEditor
       v-model:content="content"
       v-model:title="title"
-      :language="language.value"
+      :language="language"
       :icon="icon"
       :theme="theme.value"
       :background="background.value"
