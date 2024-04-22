@@ -9,6 +9,11 @@ interface Props {
   roundedCorners: boolean
 }
 
+interface ResizeData {
+  width: number
+  height: number
+}
+
 const props = defineProps<Props>()
 
 const content = defineModel<string>('content', { required: true, })
@@ -17,9 +22,15 @@ const title = defineModel<string>('title', { required: true, })
 
 const loading = ref(true)
 
+const width = ref(768)
+
+const height = ref(400)
+
 const root = ref<HTMLDivElement>()
 
-const AceEditor = ref<unknown>('div')
+const resizer = ref<unknown>('div')
+
+const editor = ref<unknown>('div')
 
 const headerClass = computed(() => ({
   'hidden': !props.showHeader,
@@ -33,8 +44,13 @@ const mainClass = computed(() => ({
 const rootStyle = computed(() => ({
   background: props.background,
   padding: props.padding,
-  maxWidth: '768px',
-  width: '100%',
+  margin: '0 auto',
+}))
+
+const editorStyle = computed(() => ({
+  height: props.showHeader
+    ? `calc(${height.value}px - ${props.padding} - ${props.padding} - 56px)`
+    : `calc(${height.value}px - ${props.padding} - ${props.padding})`,
 }))
 
 onMounted(async () => {
@@ -48,9 +64,16 @@ onMounted(async () => {
   await import('ace-builds/src-noconflict/theme-monokai')
   await import('ace-builds/src-noconflict/theme-twilight')
   await import('ace-builds/src-noconflict/theme-terminal')
-  AceEditor.value = markRaw((await import('vue3-ace-editor')).VAceEditor)
+  // @ts-ignore
+  resizer.value = markRaw((await import('vue-resizable')).default)
+  editor.value = markRaw((await import('vue3-ace-editor')).VAceEditor)
   loading.value = false
 })
+
+const handleResize = (data: ResizeData) => {
+  width.value = data.width
+  height.value = data.height
+}
 
 const getScreenshot = async () => {
   if (!root.value) {
@@ -78,50 +101,60 @@ defineExpose({
       </p>
     </div>
   </slot>
-  <div
+  <component
     v-else
-    :style="rootStyle"
-    ref="root"
+    :is="resizer"
+    :width="width"
+    :min-width="300"
+    :height="height"
+    :min-height="300"
+    :disable-attributes="['t']"
+    @resize:move="handleResize"
   >
-    <header
-      :class="headerClass"
-      class="flex items-center justify-between h-14 px-4 bg-black bg-opacity-80"
+    <div
+      :style="rootStyle"
+      ref="root"
     >
-      <div class="flex items-center gap-x-1">
-        <div class="w-3 h-3 rounded-full bg-[#ff5656]"></div>
-        <div class="w-3 h-3 rounded-full bg-[#ffbc6a]"></div>
-        <div class="w-3 h-3 rounded-full bg-[#67f772]"></div>
-      </div>
-      <div class="mx-auto">
-        <UInput
-          v-model="title"
-          :padded="false"
-          variant="none"
-          class="w-full text-[hsla(0,0%,100%,0.6)] bg-transparent"
-          input-class="font-medium text-base text-center"
+      <header
+        :class="headerClass"
+        class="flex items-center justify-between h-14 px-4 bg-black bg-opacity-80"
+      >
+        <div class="flex items-center gap-x-1">
+          <div class="w-3 h-3 rounded-full bg-[#ff5656]"></div>
+          <div class="w-3 h-3 rounded-full bg-[#ffbc6a]"></div>
+          <div class="w-3 h-3 rounded-full bg-[#67f772]"></div>
+        </div>
+        <div class="mx-auto">
+          <UInput
+            v-model="title"
+            :padded="false"
+            variant="none"
+            class="w-full text-[hsla(0,0%,100%,0.6)] bg-transparent"
+            input-class="font-medium text-base text-center"
+          />
+        </div>
+        <div class="flex justify-center w-11 p-1 bg-black bg-opacity-30 rounded-sm">
+          <img
+            :src="icon"
+            :alt="language"
+            class="w-8"
+          />
+        </div>
+      </header>
+      <main
+        :class="mainClass"
+        class="overflow-hidden"
+      >
+        <component
+          v-model:value="content"
+          :is="editor"
+          :lang="language"
+          :theme="theme"
+          :style="editorStyle"
         />
-      </div>
-      <div class="flex justify-center w-11 p-1 bg-black bg-opacity-30 rounded-sm">
-        <img
-          :src="icon"
-          :alt="language"
-          class="w-8"
-        />
-      </div>
-    </header>
-    <main
-      :class="mainClass"
-      class="overflow-hidden"
-    >
-      <component
-        v-model:value="content"
-        :is="AceEditor"
-        :lang="language"
-        :theme="theme"
-        style="height: 400px"
-      />
-    </main>
-  </div>
+      </main>
+    </div>
+  </component>
 </template>
 
 <style>
