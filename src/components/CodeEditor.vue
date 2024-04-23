@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ResizeData } from '~/resizer'
+
 interface Props {
   language: string
   icon: string
@@ -9,11 +11,6 @@ interface Props {
   roundedCorners: boolean
 }
 
-interface ResizeData {
-  width: number
-  height: number
-}
-
 const props = defineProps<Props>()
 
 const content = defineModel<string>('content', { required: true, })
@@ -21,6 +18,8 @@ const content = defineModel<string>('content', { required: true, })
 const title = defineModel<string>('title', { required: true, })
 
 const loading = ref(true)
+
+const error = ref<Error | null>(null)
 
 const width = ref(768)
 
@@ -38,13 +37,13 @@ const headerClass = computed(() => ({
 }))
 
 const mainClass = computed(() => ({
+  'rounded-t-md': props.roundedCorners && !props.showHeader,
   'rounded-b-md': props.roundedCorners,
 }))
 
 const rootStyle = computed(() => ({
   background: props.background,
   padding: props.padding,
-  margin: '0 auto',
 }))
 
 const editorStyle = computed(() => ({
@@ -52,23 +51,6 @@ const editorStyle = computed(() => ({
     ? `calc(${height.value}px - ${props.padding} - ${props.padding} - 56px)`
     : `calc(${height.value}px - ${props.padding} - ${props.padding})`,
 }))
-
-onMounted(async () => {
-  await import('ace-builds')
-  await import('ace-builds/src-noconflict/mode-javascript')
-  await import('ace-builds/src-noconflict/mode-html')
-  await import('ace-builds/src-noconflict/mode-css')
-  await import('ace-builds/src-noconflict/mode-python')
-  await import('ace-builds/src-noconflict/mode-java')
-  await import('ace-builds/src-noconflict/mode-typescript')
-  await import('ace-builds/src-noconflict/theme-monokai')
-  await import('ace-builds/src-noconflict/theme-twilight')
-  await import('ace-builds/src-noconflict/theme-terminal')
-  // @ts-ignore
-  resizer.value = markRaw((await import('vue-resizable')).default)
-  editor.value = markRaw((await import('vue3-ace-editor')).VAceEditor)
-  loading.value = false
-})
 
 const handleResize = (data: ResizeData) => {
   width.value = data.width
@@ -85,9 +67,20 @@ const getScreenshot = async () => {
   return screenshot
 }
 
-defineExpose({
-  getScreenshot,
-})
+const initialize = async () => {
+  try {
+    resizer.value = markRaw((await import('~/resizer')).VResizer)
+    editor.value = markRaw((await import('~/editor')).VEditor)
+  } catch (e) {
+    error.value = (e as Error)
+  } finally {
+    loading.value = false
+  }
+}
+
+defineExpose({ getScreenshot })
+
+onMounted(initialize)
 </script>
 
 <template>
@@ -101,14 +94,28 @@ defineExpose({
       </p>
     </div>
   </slot>
+  <slot
+    v-else-if="error"
+    name="error"
+    :error="error"
+  >
+    <UAlert
+      :title="error.name"
+      :description="error.message"
+      :ui="{ wrapper: 'max-w-2xl my-0 mx-auto' }"
+      icon="i-heroicons-exclamation-triangle"
+      color="red"
+      variant="solid"
+    />
+  </slot>
   <component
     v-else
     :is="resizer"
     :width="width"
-    :min-width="300"
+    :min-width="400"
     :height="height"
     :min-height="300"
-    :disable-attributes="['t']"
+    :disable-attributes="['t', 'l']"
     @resize:move="handleResize"
   >
     <div
@@ -130,14 +137,14 @@ defineExpose({
             :padded="false"
             variant="none"
             class="w-full text-[hsla(0,0%,100%,0.6)] bg-transparent"
-            input-class="font-medium text-base text-center"
+            input-class="font-medium text-base leading-8 text-center"
           />
         </div>
         <div class="flex justify-center w-11 p-1 bg-black bg-opacity-30 rounded-sm">
           <img
             :src="icon"
             :alt="language"
-            class="w-8"
+            class="w-8 h-8"
           />
         </div>
       </header>
